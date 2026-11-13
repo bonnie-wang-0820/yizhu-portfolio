@@ -756,23 +756,11 @@ window.portfolio = {
         },
         {
           "title": "线下路演与项目成果",
-          "text": "参加厦门线下路演，展示公益议题、产品方案、核心功能与迭代计划。项目获评“2025 LIGHT 创造营年度优秀项目”。下方展示荣誉证书、个人汇报与团队展示记录。",
+          "text": "参加厦门线下路演，展示公益议题、产品方案、核心功能与迭代计划。项目获评“2025 LIGHT 创造营年度优秀项目”。下方展示项目荣誉证书。",
           "images": [
             {
               "src": "media/lemon-light-award.jpg",
               "caption": "2025 LIGHT 创造营 · 年度优秀项目"
-            },
-            {
-              "src": "media/lemon-roadshow-speaker.jpg",
-              "caption": "厦门路演 · 产品核心功能介绍"
-            },
-            {
-              "src": "media/lemon-roadshow-interface.jpg",
-              "caption": "厦门路演 · 界面与交互方案展示"
-            },
-            {
-              "src": "media/lemon-roadshow-team.jpg",
-              "caption": "2025 LIGHT 创造营 · 团队展示"
             }
           ],
           "clips": []
