@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="240" viewBox="0 0 600 240" preserveAspectRatio="none">
+ <defs>
+  <linearGradient id="acid" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#baff75"/><stop offset=".24" stop-color="#8fffe4"/><stop offset=".48" stop-color="#ce9aff"/><stop offset=".69" stop-color="#ff9de7"/><stop offset=".85" stop-color="#e9ff91"/><stop offset="1" stop-color="#7fffbd"/></linearGradient>
+  <filter id="flow" x="-30%" y="-60%" width="160%" height="220%"><feTurbulence type="fractalNoise" baseFrequency=".009 .018" numOctaves="2" seed="8" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="75" xChannelSelector="R" yChannelSelector="G"/></filter>
+ </defs>
+ <path fill="url(#acid)" d="M0 0h600v240H0z"/>
+ <g filter="url(#flow)" fill="none"><path stroke="#f5bfff" stroke-width="38" d="M-70 200C130-100 180 350 370 80S550 180 680-30"/><path stroke="#adffb9" stroke-width="18" d="M-70 175C130-125 180 325 370 55S550 155 680-55"/><path stroke="#b4b5ff" stroke-width="9" d="M-70 158C130-142 180 308 370 38S550 138 680-72"/></g>
+</svg>

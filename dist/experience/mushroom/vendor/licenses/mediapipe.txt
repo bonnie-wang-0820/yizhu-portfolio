@@ -1,0 +1,7 @@
+MediaPipe Tasks Vision
+Copyright Google LLC
+Package: @mediapipe/tasks-vision 0.10.22-rc.20250304
+License: Apache-2.0, as declared by the package metadata.
+License text: https://www.apache.org/licenses/LICENSE-2.0
+Project: https://github.com/google-ai-edge/mediapipe
+The distributed vision_bundle.mjs and WASM files retain upstream notices.
