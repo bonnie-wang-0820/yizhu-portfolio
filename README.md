@@ -1,6 +1,6 @@
 # 王一竹 · 个人作品集
 
-[在线查看作品集](https://yizhu-visual-stories.ochre-scarf-7391.chatgpt.site)
+[在线查看作品集](https://bonnie-wang-0820.github.io/yizhu-portfolio)
 
 AI 短片、游戏策划与美术、三维场景、交互与公益项目。首页以视频预览和简要职责介绍项目，详情按照制作工作流展开，每一步包含文字、图片轮播及相关视频。
 
@@ -18,6 +18,8 @@ AI 短片、游戏策划与美术、三维场景、交互与公益项目。首�
 | 其他项目 | 畅行视界 · 无界柠檬 | 2025.06 |
 
 ## 运行与维护
+
+公开站点由 GitHub Pages 托管；推送 `dist/` 的修改到 `main` 后自动发布。
 
 纯静态 HTML、CSS、JavaScript，无需构建。使用 Python 3：
 
@@ -39,7 +41,7 @@ python -m http.server 4317 --directory dist
 ## 体验入口
 
 - [无界柠檬前端 Demo](https://bonnie-wang-0820.github.io/lemon-accessibility-demo/)
-- [菇毒患者线上交互体验](https://yizhu-visual-stories.ochre-scarf-7391.chatgpt.site/experience/mushroom/)
+- [菇毒患者线上交互体验](https://bonnie-wang-0820.github.io/yizhu-portfolio/experience/mushroom/)
 - [从前有座山 B 站 Demo](https://b23.tv/pFbrtCS)
 
 菇毒患者网页为原 TouchDesigner 作品的 WebGL 重建版本。摄像头、麦克风均由体验者主动开启，音视频在本机处理；也可通过情绪卡、模拟音量、鼠标或触屏体验。设备功能需要 HTTPS 或 localhost。
