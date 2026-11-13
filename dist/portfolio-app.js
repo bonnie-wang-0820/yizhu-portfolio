@@ -4,7 +4,7 @@
   const link=(id,label,cls='')=>`<a class="${cls}" href="#project/${id}" data-project="${id}">${esc(label)}</a>`;
   const external=links=>(links||[]).map(l=>`<a class="external-link" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} <span>↗</span></a>`).join('');
   document.querySelector('#navigation').innerHTML=sections.map(s=>`<div class="nav-group"><button class="nav-toggle" aria-expanded="false" aria-controls="nav-${s.id}">${s.label}<span>⌄</span></button><div class="dropdown" id="nav-${s.id}"><a href="#${s.id}">查看全部 ↘</a>${s.projects.map(id=>link(id,projects[id].title)).join('')}</div></div>`).join('');
-  document.querySelector('#work').innerHTML=sections.map((s,i)=>`<section class="work-section" id="${s.id}" aria-labelledby="title-${s.id}"><div class="section-top"><span class="section-number">0${i+1}</span><h2 id="title-${s.id}">${s.label}</h2><span class="section-en">${s.english}</span></div><div class="project-grid">${s.projects.map(id=>{const p=projects[id];return `<article class="project-card ${p.portrait?'portrait-card':''}" data-id="${id}"><div class="card-media">${p.poster?`<img src="${p.poster}" alt="" loading="lazy">`:''}${p.preview?`<video src="${p.preview}" poster="${p.poster}" muted loop playsinline preload="none" aria-hidden="true"></video>`:''}</div><a class="card-hit" href="#project/${id}" data-project="${id}" aria-label="查看${esc(p.title)}项目详情"></a><div class="card-copy"><div class="card-meta"><span>${esc(p.date)}</span><span>${esc(p.type)}</span></div><h3>${link(id,p.title)}</h3><p class="card-summary">${esc(p.summary)}</p><p class="card-credit"><span>我的工作</span>${esc(p.credit)}</p>${p.award?`<p class="card-award">${esc(p.award)}</p>`:''}<div class="card-actions">${link(id,'查看项目 ↗','detail-link')}${external(p.links)}</div></div>${p.preview?`<button class="preview-toggle" aria-label="播放${esc(p.title)}动态预览">▶</button>`:''}<span class="card-order">${String(i+1).padStart(2,'0')} / ${String(s.projects.indexOf(id)+1).padStart(2,'0')}</span></article>`}).join('')}</div></section>`).join('');
+  document.querySelector('#work').innerHTML=sections.map((s,i)=>`<section class="work-section" id="${s.id}" aria-labelledby="title-${s.id}"><div class="section-top"><span class="section-number">0${i+1}</span><h2 id="title-${s.id}">${s.label}</h2><span class="section-en">${s.english}</span></div><div class="project-grid">${s.projects.map(id=>{const p=projects[id];return `<article class="project-card ${p.portrait?'portrait-card':''}" data-id="${id}"><div class="card-media">${p.poster?`<img src="${p.poster}" alt="" loading="lazy">`:''}${p.preview?`<video src="${p.preview}" poster="${p.poster}" autoplay muted loop playsinline webkit-playsinline preload="metadata" aria-hidden="true"></video>`:''}</div><a class="card-hit" href="#project/${id}" data-project="${id}" aria-label="查看${esc(p.title)}项目详情"></a><div class="card-copy"><div class="card-meta"><span>${esc(p.date)}</span><span>${esc(p.type)}</span></div><h3>${link(id,p.title)}</h3><p class="card-summary">${esc(p.summary)}</p><p class="card-credit"><span>我的工作</span>${esc(p.credit)}</p>${p.award?`<p class="card-award">${esc(p.award)}</p>`:''}<div class="card-actions">${link(id,'查看项目 ↗','detail-link')}${external(p.links)}</div></div>${p.preview?`<button class="preview-toggle" aria-label="播放${esc(p.title)}动态预览">▶</button>`:''}<span class="card-order">${String(i+1).padStart(2,'0')} / ${String(s.projects.indexOf(id)+1).padStart(2,'0')}</span></article>`}).join('')}</div></section>`).join('');
   const dialog=document.querySelector('dialog'),content=document.querySelector('#project-content');let lastFocus,previousHash='';
   const video=(v)=>`<figure class="workflow-video"><video src="${esc(v.src)}" ${v.poster?`poster="${esc(v.poster)}"`:''} controls playsinline preload="metadata" aria-label="${esc(v.caption)}"></video><figcaption>${esc(v.caption)}</figcaption></figure>`;
   const carousel=(images,title)=>{if(!images?.length)return '';return `<div class="carousel" role="region" aria-roledescription="图片轮播" aria-label="${esc(title)}" tabindex="0" data-index="0"><div class="carousel-stage">${images.map((g,j)=>`<figure class="carousel-slide" ${j?'hidden inert':''} role="group" aria-label="${j+1} / ${images.length}"><a href="${g.src}" target="_blank" rel="noopener" aria-label="查看原图：${esc(g.caption)}"><img src="${g.src}" loading="lazy" alt="${esc(g.caption)}"></a><figcaption>${esc(g.caption)}</figcaption></figure>`).join('')}</div><div class="carousel-controls"><span class="image-hint">点击图片查看原图</span>${images.length>1?`<div class="carousel-dots" role="group" aria-label="选择图片，共 ${images.length} 张">${images.map((g,j)=>`<button class="carousel-dot" data-slide="${j}" aria-label="查看第 ${j+1} 张图片：${esc(g.caption)}" ${j===0?'aria-current="true"':''}><span></span></button>`).join('')}</div><div class="carousel-nav"><button class="carousel-autoplay" aria-label="暂停自动轮播">Ⅱ</button></div>`:''}<span class="carousel-count sr-only" aria-live="off">1 / ${images.length}</span></div></div>`};
@@ -59,9 +59,41 @@
   dialog.addEventListener('cancel',e=>{e.preventDefault();closeProject()});dialog.querySelector('.dialog-brand').addEventListener('click',e=>{e.preventDefault();closeProject();document.querySelector('#top').scrollIntoView()});
   document.querySelectorAll('.nav-group').forEach(g=>{const b=g.querySelector('button');b.addEventListener('click',()=>{const was=g.classList.contains('open');closeNav();g.classList.toggle('open',!was);g.classList.toggle('dismissed',was);b.setAttribute('aria-expanded',String(!was))});g.addEventListener('mouseenter',()=>{g.classList.remove('dismissed');b.setAttribute('aria-expanded','true')});g.addEventListener('mouseleave',()=>b.setAttribute('aria-expanded',String(g.classList.contains('open'))));g.addEventListener('keydown',e=>{if(e.key==='Escape'){closeNav();b.focus()}})});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),previews=[...document.querySelectorAll('.card-media video')];
-  function syncPreviews(){previews.forEach(v=>{const r=v.getBoundingClientRect();if(!reduced.matches&&!document.hidden&&!dialog.open&&!v.dataset.paused&&r.top<innerHeight&&r.bottom>0)v.play().catch(()=>{});else v.pause()})}
-  const observer=new IntersectionObserver(entries=>entries.forEach(({target:v,isIntersecting})=>{if(isIntersecting&&!reduced.matches&&!v.dataset.paused&&!dialog.open&&!document.hidden)v.play().catch(()=>{});else v.pause()}),{threshold:.15});
-  previews.forEach(v=>{observer.observe(v);const b=v.closest('.project-card').querySelector('.preview-toggle');v.addEventListener('play',()=>{b.textContent='Ⅱ';b.setAttribute('aria-label','暂停动态预览')});v.addEventListener('pause',()=>{b.textContent='▶';b.setAttribute('aria-label','播放动态预览')});b.addEventListener('click',()=>{if(v.paused){delete v.dataset.paused;v.play().catch(()=>{})}else{v.dataset.paused='true';v.pause()}});v.addEventListener('error',()=>{b.hidden=true;v.style.display='none'})});document.addEventListener('visibilitychange',syncPreviews);reduced.addEventListener('change',syncPreviews);
+  function shouldPlayPreview(v){
+    const r=v.getBoundingClientRect();
+    return (!reduced.matches||v.dataset.manualPlay==='true')&&!document.hidden&&!dialog.open&&!v.dataset.paused&&r.top<innerHeight&&r.bottom>0;
+  }
+  function syncPreview(v){
+    if(shouldPlayPreview(v)){
+      if(v.paused)v.play().catch(()=>{});
+    }else v.pause();
+  }
+  function syncPreviews(){previews.forEach(syncPreview)}
+  const observer=new IntersectionObserver(entries=>entries.forEach(({target})=>syncPreview(target)),{threshold:0});
+  previews.forEach(v=>{
+    // Set properties as well as attributes for inline autoplay on mobile browsers.
+    v.muted=true;v.defaultMuted=true;v.playsInline=true;v.loop=true;
+    const b=v.closest('.project-card').querySelector('.preview-toggle');
+    v.addEventListener('play',()=>{
+      if(!shouldPlayPreview(v)){v.pause();return;}
+      b.textContent='Ⅱ';b.setAttribute('aria-label','暂停动态预览');
+    });
+    v.addEventListener('pause',()=>{b.textContent='▶';b.setAttribute('aria-label','播放动态预览')});
+    v.addEventListener('canplay',()=>syncPreview(v));
+    b.addEventListener('click',()=>{
+      if(v.paused){delete v.dataset.paused;v.dataset.manualPlay='true';syncPreview(v)}
+      else{v.dataset.paused='true';v.pause()}
+    });
+    v.addEventListener('error',()=>{b.hidden=true;v.style.display='none'});
+    observer.observe(v);
+  });
+  document.addEventListener('visibilitychange',syncPreviews);
+  addEventListener('pageshow',syncPreviews);
+  // Retry blocked autoplay after a real interaction without resetting manual pauses.
+  document.addEventListener('pointerup',syncPreviews,{passive:true});
+  document.addEventListener('keydown',syncPreviews);
+  reduced.addEventListener('change',syncPreviews);
+  syncPreviews();
   addEventListener('popstate',()=>{if(location.hash.startsWith('#project/'))openProject(location.hash.slice(9));else if(dialog.open)dismiss()});
   if(location.hash.startsWith('#project/'))openProject(location.hash.slice(9));
 })();
