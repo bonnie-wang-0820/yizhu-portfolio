@@ -4,7 +4,7 @@
   const link=(id,label,cls='')=>`<a class="${cls}" href="#project/${id}" data-project="${id}">${esc(label)}</a>`;
   const external=links=>(links||[]).map(l=>`<a class="external-link" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} <span>↗</span></a>`).join('');
   document.querySelector('#navigation').innerHTML=sections.map(s=>`<div class="nav-group"><button class="nav-toggle" aria-expanded="false" aria-controls="nav-${s.id}">${s.label}<span>⌄</span></button><div class="dropdown" id="nav-${s.id}"><a href="#${s.id}">查看全部 ↘</a>${s.projects.map(id=>link(id,projects[id].title)).join('')}</div></div>`).join('');
-  document.querySelector('#work').innerHTML=sections.map((s,i)=>`<section class="work-section" id="${s.id}" aria-labelledby="title-${s.id}"><div class="section-top"><span class="section-number">0${i+1}</span><h2 id="title-${s.id}">${s.label}</h2><span class="section-en">${s.english}</span></div><div class="project-grid">${s.projects.map(id=>{const p=projects[id];return `<article class="project-card ${p.portrait?'portrait-card':''}" data-id="${id}"><div class="card-media">${p.poster?`<img src="${p.poster}" alt="" loading="lazy">`:''}${p.preview?`<video src="${p.preview}" poster="${p.poster}" autoplay muted loop playsinline webkit-playsinline preload="metadata" aria-hidden="true"></video>`:''}</div><a class="card-hit" href="#project/${id}" data-project="${id}" aria-label="查看${esc(p.title)}项目详情"></a><div class="card-copy"><div class="card-meta"><span>${esc(p.date)}</span><span>${esc(p.type)}</span></div><h3>${link(id,p.title)}</h3><p class="card-summary">${esc(p.summary)}</p><p class="card-credit"><span>我的工作</span>${esc(p.credit)}</p>${p.award?`<p class="card-award">${esc(p.award)}</p>`:''}<div class="card-actions">${link(id,'查看项目 ↗','detail-link')}${external(p.links)}</div></div>${p.preview?`<button class="preview-toggle" aria-label="播放${esc(p.title)}动态预览">▶</button>`:''}<span class="card-order">${String(i+1).padStart(2,'0')} / ${String(s.projects.indexOf(id)+1).padStart(2,'0')}</span></article>`}).join('')}</div></section>`).join('');
+  document.querySelector('#work').innerHTML=sections.map((s,i)=>`<section class="work-section" id="${s.id}" aria-labelledby="title-${s.id}"><div class="section-top"><span class="section-number">0${i+1}</span><h2 id="title-${s.id}">${s.label}</h2><span class="section-en">${s.english}</span></div><div class="project-grid">${s.projects.map(id=>{const p=projects[id];return `<article class="project-card ${p.portrait?'portrait-card':''}" data-id="${id}"><div class="card-media">${p.poster?`<img src="${p.poster}" alt="" loading="lazy">`:''}${p.preview?`<video src="${p.preview}" poster="${p.poster}" data-fallback="${p.previewFallback||''}" autoplay muted loop playsinline webkit-playsinline x5-playsinline="true" preload="metadata" aria-hidden="true"></video>`:''}</div><a class="card-hit" href="#project/${id}" data-project="${id}" aria-label="查看${esc(p.title)}项目详情"></a><div class="card-copy"><div class="card-meta"><span>${esc(p.date)}</span><span>${esc(p.type)}</span></div><h3>${link(id,p.title)}</h3><p class="card-summary">${esc(p.summary)}</p><p class="card-credit"><span>我的工作</span>${esc(p.credit)}</p>${p.award?`<p class="card-award">${esc(p.award)}</p>`:''}<div class="card-actions">${link(id,'查看项目 ↗','detail-link')}${external(p.links)}</div></div>${p.preview?`<button class="preview-toggle" aria-label="播放${esc(p.title)}动态预览">▶</button>`:''}<span class="card-order">${String(i+1).padStart(2,'0')} / ${String(s.projects.indexOf(id)+1).padStart(2,'0')}</span></article>`}).join('')}</div></section>`).join('');
   const dialog=document.querySelector('dialog'),content=document.querySelector('#project-content');let lastFocus,previousHash='';
   const video=(v)=>`<figure class="workflow-video"><video src="${esc(v.src)}" ${v.poster?`poster="${esc(v.poster)}"`:''} controls playsinline preload="metadata" aria-label="${esc(v.caption)}"></video><figcaption>${esc(v.caption)}</figcaption></figure>`;
   const carousel=(images,title)=>{if(!images?.length)return '';return `<div class="carousel" role="region" aria-roledescription="图片轮播" aria-label="${esc(title)}" tabindex="0" data-index="0"><div class="carousel-stage">${images.map((g,j)=>`<figure class="carousel-slide" ${j?'hidden inert':''} role="group" aria-label="${j+1} / ${images.length}"><a href="${g.src}" target="_blank" rel="noopener" aria-label="查看原图：${esc(g.caption)}"><img src="${g.src}" loading="lazy" alt="${esc(g.caption)}"></a><figcaption>${esc(g.caption)}</figcaption></figure>`).join('')}</div><div class="carousel-controls"><span class="image-hint">点击图片查看原图</span>${images.length>1?`<div class="carousel-dots" role="group" aria-label="选择图片，共 ${images.length} 张">${images.map((g,j)=>`<button class="carousel-dot" data-slide="${j}" aria-label="查看第 ${j+1} 张图片：${esc(g.caption)}" ${j===0?'aria-current="true"':''}><span></span></button>`).join('')}</div><div class="carousel-nav"><button class="carousel-autoplay" aria-label="暂停自动轮播">Ⅱ</button></div>`:''}<span class="carousel-count sr-only" aria-live="off">1 / ${images.length}</span></div></div>`};
@@ -50,7 +50,7 @@
   function openProject(id){const p=projects[id];if(!p)return;if(!dialog.open){lastFocus=document.activeElement;previousHash=location.hash.startsWith('#project/')?'#work':location.hash;}
     clearCarousels();
     content.innerHTML=`<div class="detail-head"><p class="eyebrow">${esc(p.date)} <span>/</span> ${esc(p.type)}</p><h2 id="dialog-title">${esc(p.title)}</h2><p class="detail-summary">${esc(p.summary)}</p><dl class="detail-meta"><div><dt>我的工作</dt><dd>${esc(p.credit)}</dd></div><div><dt>工具与方法</dt><dd>${esc(p.tools)}</dd></div><div><dt>项目状态</dt><dd>${esc(p.status)}</dd></div></dl>${p.award?`<p class="detail-award">${esc(p.award)}</p>`:''}<div class="detail-links">${external(p.links)}</div></div>${p.video?`<div class="detail-player">${video({src:p.video,poster:p.poster,caption:p.videoCaption||'项目演示视频 · 点击播放'})}</div>`:''}<div class="workflow-header"><p class="eyebrow">PROCESS / 制作过程</p><p>${p.workflows.map((s,i)=>`<a href="#step-${id}-${i}" data-step="step-${id}-${i}">${String(i+1).padStart(2,'0')} ${esc(s.title)}</a>`).join('')}</p></div><div class="workflows">${p.workflows.map((s,i)=>`<section class="workflow-step" id="step-${id}-${i}"><div class="step-description"><span class="step-number">${String(i+1).padStart(2,'0')}</span><h3>${esc(s.title)}</h3>${s.text.split('\n').map(t=>`<p>${esc(t)}</p>`).join('')}</div><div class="step-media">${carousel(s.images,s.title,i)}${s.clips?.length?`<div class="step-clips">${s.clips.map(video).join('')}</div>`:''}</div></section>`).join('')}</div><div class="detail-foot"><button class="close-dialog">返回作品集 ↑</button></div>`;
-    previews.forEach(v=>v.pause());if(!dialog.open)dialog.showModal();document.body.style.overflow='hidden';dialog.scrollTop=0;document.querySelector('.dialog-top .close-dialog').focus();initCarousels();content.querySelectorAll('[data-step]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.getElementById(a.dataset.step).scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'})}));content.querySelectorAll('video').forEach(v=>{v.addEventListener('play',()=>content.querySelectorAll('video').forEach(other=>{if(other!==v)other.pause()}));v.addEventListener('error',()=>{const n=document.createElement('p');n.className='detail-error';n.textContent='视频暂时无法加载，请刷新后重试。';v.after(n)},{once:true})});
+    if(!dialog.open)dialog.showModal();syncPreviews();document.body.style.overflow='hidden';dialog.scrollTop=0;document.querySelector('.dialog-top .close-dialog').focus();initCarousels();content.querySelectorAll('[data-step]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.getElementById(a.dataset.step).scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'})}));content.querySelectorAll('video').forEach(v=>{v.addEventListener('play',()=>content.querySelectorAll('video').forEach(other=>{if(other!==v)other.pause()}));v.addEventListener('error',()=>{const n=document.createElement('p');n.className='detail-error';n.textContent='视频暂时无法加载，请刷新后重试。';v.after(n)},{once:true})});
   }
   function dismiss(){clearCarousels();content.querySelectorAll('video').forEach(v=>v.pause());dialog.close();document.body.style.overflow='';lastFocus?.focus({preventScroll:true});syncPreviews()}
   function closeProject(){if(!dialog.open)return;dismiss();history.replaceState(null,'',location.pathname+location.search+(previousHash||'#work'))}
@@ -59,39 +59,82 @@
   dialog.addEventListener('cancel',e=>{e.preventDefault();closeProject()});dialog.querySelector('.dialog-brand').addEventListener('click',e=>{e.preventDefault();closeProject();document.querySelector('#top').scrollIntoView()});
   document.querySelectorAll('.nav-group').forEach(g=>{const b=g.querySelector('button');b.addEventListener('click',()=>{const was=g.classList.contains('open');closeNav();g.classList.toggle('open',!was);g.classList.toggle('dismissed',was);b.setAttribute('aria-expanded',String(!was))});g.addEventListener('mouseenter',()=>{g.classList.remove('dismissed');b.setAttribute('aria-expanded','true')});g.addEventListener('mouseleave',()=>b.setAttribute('aria-expanded',String(g.classList.contains('open'))));g.addEventListener('keydown',e=>{if(e.key==='Escape'){closeNav();b.focus()}})});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),previews=[...document.querySelectorAll('.card-media video')];
+  const previewStates=new WeakMap();
   function shouldPlayPreview(v){
     const r=v.getBoundingClientRect();
     return (!reduced.matches||v.dataset.manualPlay==='true')&&!document.hidden&&!dialog.open&&!v.dataset.paused&&r.top<innerHeight&&r.bottom>0;
   }
-  function syncPreview(v){
-    if(shouldPlayPreview(v)){
-      if(v.paused)v.play().catch(()=>{});
-    }else v.pause();
+  function labelPreview(v,playing){
+    const b=previewStates.get(v).button;
+    b.textContent=playing?'Ⅱ':'▶';
+    b.setAttribute('aria-label',playing?'暂停动态预览':'播放动态预览');
   }
-  function syncPreviews(){previews.forEach(syncPreview)}
+  function clearPreviewTimer(v){
+    const state=previewStates.get(v);clearTimeout(state.timer);state.timer=null;
+  }
+  function stopFallback(v){
+    const state=previewStates.get(v);
+    if(state.fallback){state.image.src=state.poster;state.fallback=false;}
+    v.style.opacity='';
+  }
+  function showFallback(v){
+    const state=previewStates.get(v);
+    if(!shouldPlayPreview(v)||!v.dataset.fallback||state.fallback)return;
+    state.fallback=true;state.image.loading='eager';state.image.src=v.dataset.fallback;
+    // Keep the video in layout so WebKit can still resume inline playback.
+    v.style.opacity='0';labelPreview(v,true);
+  }
+  function syncPreview(v,retry=false){
+    const state=previewStates.get(v);
+    if(!shouldPlayPreview(v)){
+      clearPreviewTimer(v);v.pause();stopFallback(v);labelPreview(v,false);return;
+    }
+    if(retry)state.blocked=false;
+    if(state.blocked){showFallback(v);return;}
+    if(!state.timer&&!state.fallback&&(v.paused||v.readyState<3)){
+      state.timer=setTimeout(()=>{state.timer=null;if(v.paused||v.readyState<3)showFallback(v)},1800);
+    }
+    if(v.paused&&!state.pending){
+      v.muted=true;
+      state.pending=true;
+      try{
+        Promise.resolve(v.play()).catch(error=>{
+          if(error.name!=='AbortError')state.blocked=true;
+          showFallback(v);
+        }).finally(()=>{state.pending=false;});
+      }catch(error){state.pending=false;state.blocked=true;showFallback(v);}
+    }
+  }
+  function syncPreviews(){previews.forEach(v=>syncPreview(v))}
+  function retryPreviews(){previews.forEach(v=>syncPreview(v,true))}
   const observer=new IntersectionObserver(entries=>entries.forEach(({target})=>syncPreview(target)),{threshold:0});
   previews.forEach(v=>{
-    // Set properties as well as attributes for inline autoplay on mobile browsers.
     v.muted=true;v.defaultMuted=true;v.playsInline=true;v.loop=true;
-    const b=v.closest('.project-card').querySelector('.preview-toggle');
-    v.addEventListener('play',()=>{
-      if(!shouldPlayPreview(v)){v.pause();return;}
-      b.textContent='Ⅱ';b.setAttribute('aria-label','暂停动态预览');
+    const card=v.closest('.project-card'),button=card.querySelector('.preview-toggle'),image=card.querySelector('.card-media img');
+    previewStates.set(v,{button,image,poster:image.getAttribute('src'),fallback:false,blocked:false,pending:false,timer:null});
+    v.addEventListener('play',()=>{if(!shouldPlayPreview(v))v.pause();});
+    v.addEventListener('playing',()=>{
+      if(!shouldPlayPreview(v)){syncPreview(v);return;}
+      clearPreviewTimer(v);stopFallback(v);labelPreview(v,true);
     });
-    v.addEventListener('pause',()=>{b.textContent='▶';b.setAttribute('aria-label','播放动态预览')});
+    v.addEventListener('pause',()=>{
+      if(shouldPlayPreview(v))showFallback(v);else labelPreview(v,false);
+    });
     v.addEventListener('canplay',()=>syncPreview(v));
-    b.addEventListener('click',()=>{
-      if(v.paused){delete v.dataset.paused;v.dataset.manualPlay='true';syncPreview(v)}
-      else{v.dataset.paused='true';v.pause()}
+    button.addEventListener('click',()=>{
+      const state=previewStates.get(v);
+      if(!v.paused||state.fallback){v.dataset.paused='true';syncPreview(v)}
+      else{delete v.dataset.paused;v.dataset.manualPlay='true';syncPreview(v,true)}
     });
-    v.addEventListener('error',()=>{b.hidden=true;v.style.display='none'});
+    v.addEventListener('error',()=>{previewStates.get(v).blocked=true;showFallback(v)});
     observer.observe(v);
   });
   document.addEventListener('visibilitychange',syncPreviews);
-  addEventListener('pageshow',syncPreviews);
-  // Retry blocked autoplay after a real interaction without resetting manual pauses.
-  document.addEventListener('pointerup',syncPreviews,{passive:true});
-  document.addEventListener('keydown',syncPreviews);
+  addEventListener('pageshow',retryPreviews);
+  document.addEventListener('WeixinJSBridgeReady',retryPreviews);
+  document.addEventListener('touchend',retryPreviews,{passive:true});
+  document.addEventListener('pointerup',retryPreviews,{passive:true});
+  document.addEventListener('keydown',retryPreviews);
   reduced.addEventListener('change',syncPreviews);
   syncPreviews();
   addEventListener('popstate',()=>{if(location.hash.startsWith('#project/'))openProject(location.hash.slice(9));else if(dialog.open)dismiss()});

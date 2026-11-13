@@ -108,7 +108,8 @@ window.portfolio = {
           ],
           "clips": []
         }
-      ]
+      ],
+      "previewFallback": "media/cicheng-preview.webp"
     },
     "wuxian": {
       "title": "五仙",
@@ -183,7 +184,8 @@ window.portfolio = {
           ],
           "clips": []
         }
-      ]
+      ],
+      "previewFallback": "media/wuxian-preview.webp"
     },
     "gengshi": {
       "title": "梗噬",
@@ -288,7 +290,8 @@ window.portfolio = {
           ],
           "clips": []
         }
-      ]
+      ],
+      "previewFallback": "media/gengshi-preview.webp"
     },
     "mountain": {
       "title": "从前有座山",
@@ -356,7 +359,8 @@ window.portfolio = {
           ],
           "clips": []
         }
-      ]
+      ],
+      "previewFallback": "media/mountain-preview.webp"
     },
     "libai": {
       "title": "李白诗意数字展馆",
@@ -501,7 +505,8 @@ window.portfolio = {
           ],
           "clips": []
         }
-      ]
+      ],
+      "previewFallback": "media/libai-preview.webp"
     },
     "hide": {
       "title": "躲猫猫 VR",
@@ -593,7 +598,8 @@ window.portfolio = {
             }
           ]
         }
-      ]
+      ],
+      "previewFallback": "media/hide-preview.webp"
     },
     "mushroom": {
       "title": "菇毒患者",
@@ -675,7 +681,8 @@ window.portfolio = {
           "label": "线上交互体验",
           "url": "experience/mushroom/"
         }
-      ]
+      ],
+      "previewFallback": "media/mushroom-preview.webp"
     },
     "lemon": {
       "title": "畅行视界 · 无界柠檬",
@@ -765,7 +772,8 @@ window.portfolio = {
           ],
           "clips": []
         }
-      ]
+      ],
+      "previewFallback": "media/lemon-preview.webp"
     }
   }
 };
